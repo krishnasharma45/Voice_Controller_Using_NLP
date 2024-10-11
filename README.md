@@ -1,1 +1,1 @@
-# Voice_Controller_Using_NLP
+A voice controller project that uses NLP for interpreting commands, ESP microcontrollers for processing, and an INMP441 sensor for capturing audio. The INMP441 is a high-quality MEMS microphone, providing clear voice input, while the ESPs manage data transmission and device control. Together, these components create an efficient voice-controlled system, integrating hardware with AI to enable real-time voice interaction and smart device management.
