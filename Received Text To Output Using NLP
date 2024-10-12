@@ -1,4 +1,4 @@
-#define pin_1 2  // Pin for light one control
+#define pin_1 2   // Pin for light one control
 #define pin_2 16  // Pin for light two control
 #define pin_3 18  // Pin for light three control
 
@@ -20,49 +20,42 @@ void loop() {
 }
 
 void processCommand(String command) {
-    command.toLowerCase(); // Convert to lowercase for easier matching
+    command.toLowerCase();  // Convert to lowercase for easier matching
 
-    // Light one control
+    // Control lights based on commands
     if (command.indexOf("turn on light one") >= 0) {
-        digitalWrite(pin_1, HIGH);  // Set pin_1 HIGH (1)
-        Serial.println("Pin 1 set HIGH");
+        controlLight(pin_1, HIGH);
     } else if (command.indexOf("turn off light one") >= 0) {
-        digitalWrite(pin_1, LOW);   // Set pin_1 LOW (0)
-        Serial.println("Pin 1 set LOW");
-    }
-    
-    // Light two control
-    else if (command.indexOf("turn on light two") >= 0) {
-        digitalWrite(pin_2, HIGH);  // Set pin_2 HIGH (1)
-        Serial.println("Pin 2 set HIGH");
+        controlLight(pin_1, LOW);
+    } else if (command.indexOf("turn on light two") >= 0) {
+        controlLight(pin_2, HIGH);
     } else if (command.indexOf("turn off light two") >= 0) {
-        digitalWrite(pin_2, LOW);   // Set pin_2 LOW (0)
-        Serial.println("Pin 2 set LOW");
-    }
-    
-    // Light three control
-    else if (command.indexOf("turn on light three") >= 0) {
-        digitalWrite(pin_3, HIGH);  // Set pin_3 HIGH (1)
-        Serial.println("Pin 3 set HIGH");
+        controlLight(pin_2, LOW);
+    } else if (command.indexOf("turn on light three") >= 0) {
+        controlLight(pin_3, HIGH);
     } else if (command.indexOf("turn off light three") >= 0) {
-        digitalWrite(pin_3, LOW);   // Set pin_3 LOW (0)
-        Serial.println("Pin 3 set LOW");
-    }
-    
-    // All lights control
-    else if (command.indexOf("turn on all lights") >= 0) {
-        digitalWrite(pin_1, HIGH);
-        digitalWrite(pin_2, HIGH);
-        digitalWrite(pin_3, HIGH);
-        Serial.println("All pins set HIGH");
+        controlLight(pin_3, LOW);
+    } else if (command.indexOf("turn on all lights") >= 0) {
+        controlAllLights(HIGH);
     } else if (command.indexOf("turn off all lights") >= 0) {
-        digitalWrite(pin_1, LOW);
-        digitalWrite(pin_2, LOW);
-        digitalWrite(pin_3, LOW);
-        Serial.println("All pins set LOW");
-    } 
-    
-    else {
+        controlAllLights(LOW);
+    } else {
         Serial.println("Command not recognized");
     }
-} 
+}
+
+// Function to control a single light
+void controlLight(int pin, int state) {
+    digitalWrite(pin, state);  // Set the specified pin to the desired state
+    Serial.print("Pin ");
+    Serial.print(pin);
+    Serial.println(state == HIGH ? " set HIGH" : " set LOW");
+}
+
+// Function to control all lights
+void controlAllLights(int state) {
+    for (int pin : {pin_1, pin_2, pin_3}) {
+        digitalWrite(pin, state);
+    }
+    Serial.println(state == HIGH ? "All pins set HIGH" : "All pins set LOW");
+}
