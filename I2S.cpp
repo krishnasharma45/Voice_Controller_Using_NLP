@@ -5,13 +5,6 @@
 #define PIN_I2S_DIN 34
 #define PIN_I2S_DOUT 25
 
-// This I2S specification : 
-//  -   LRC high is channel 2 (right).
-//  -   LRC signal transitions once each word.
-//  -   DATA is valid on the CLOCK rising edge.
-//  -   Data bits are MSB first.
-//  -   DATA bits are left-aligned with respect to LRC edge.
-//  -   DATA bits are right-shifted by one with respect to LRC edges.
 I2S::I2S(MicType micType) {
   if (micType == M5GO || micType == M5STACKFIRE) {
     BITS_PER_SAMPLE = I2S_BITS_PER_SAMPLE_16BIT;
@@ -29,8 +22,8 @@ I2S::I2S(MicType micType) {
     i2s_set_adc_mode(ADC_UNIT_1, ADC1_CHANNEL_6);
     i2s_set_clk(I2S_NUM_0, SAMPLE_RATE, BITS_PER_SAMPLE, I2S_CHANNEL_STEREO);
     i2s_adc_enable(I2S_NUM_0);
-  }
-  else if (micType == INMP441 || micType == ICS43434) {  // Changed from ADMP441 to INMP441
+  } 
+  else if (micType == INMP441 || micType == ICS43434) {
     BITS_PER_SAMPLE = I2S_BITS_PER_SAMPLE_32BIT;
     i2s_config_t i2s_config = {
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
@@ -42,21 +35,23 @@ I2S::I2S(MicType micType) {
       .dma_buf_count = 16,
       .dma_buf_len = 60
     };
-    
-    // Configure pin assignments for I2S
+
     i2s_pin_config_t pin_config;
     pin_config.bck_io_num = PIN_I2S_BCLK;
     pin_config.ws_io_num = PIN_I2S_LRC;
-    pin_config.data_out_num = I2S_PIN_NO_CHANGE;  // No data output for microphone
-    pin_config.data_in_num = PIN_I2S_DIN;         // Input pin for INMP441
+    pin_config.data_out_num = I2S_PIN_NO_CHANGE;
+    pin_config.data_in_num = PIN_I2S_DIN;
     i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);
     i2s_set_pin(I2S_NUM_0, &pin_config);
     i2s_set_clk(I2S_NUM_0, SAMPLE_RATE, BITS_PER_SAMPLE, I2S_CHANNEL_STEREO);
   }
 }
 
+// Corrected this function to use i2s_read instead of i2s_read_bytes
 int I2S::Read(char* data, int numData) {
-  return i2s_read_bytes(I2S_NUM_0, (char *)data, numData, portMAX_DELAY);
+  size_t bytes_read;
+  i2s_read(I2S_NUM_0, (void*)data, numData, &bytes_read, portMAX_DELAY);
+  return bytes_read;
 }
 
 int I2S::GetBitPerSample() {
