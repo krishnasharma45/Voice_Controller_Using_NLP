@@ -1,4 +1,4 @@
-#define pin_1 2   // Pin for light one control
+#define pin_1 21   // Pin for light one control
 #define pin_2 16  // Pin for light two control
 #define pin_3 18  // Pin for light three control
 
