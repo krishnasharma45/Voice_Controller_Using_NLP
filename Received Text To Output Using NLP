@@ -1,61 +1,96 @@
-#define pin_1 21   // Pin for light one control
-#define pin_2 16  // Pin for light two control
-#define pin_3 18  // Pin for light three control
+#define pin_1 21  // Pin for light one control
+#define pin_2 18  // Pin for light two control
+#define pin_3 16  // Pin for light three control
+#define pin_4 15   // Pin for "not recognized" message (optional)
+
+#define RXp2 3  // RECEIVER
+#define TXp2 1  // TRANSMITTER
+HardwareSerial mySerial(1);  // Use UART1 (TX1/RX3)
+
+// Function prototypes
+void controlLight(int pin, int state);
+void controlAllLights(int state);
+void resetAllLights();  // function to reset all lights
 
 void setup() {
-    pinMode(pin_1, OUTPUT);
-    pinMode(pin_2, OUTPUT);
-    pinMode(pin_3, OUTPUT);
-    Serial.begin(115200);
-    Serial2.begin(115200);
+  pinMode(pin_1, OUTPUT);
+  pinMode(pin_2, OUTPUT);
+  pinMode(pin_3, OUTPUT);
+  pinMode(pin_4, OUTPUT); // For unrecognized commands
+
+  Serial.begin(115200);  // Initialize the Serial Monitor
+  mySerial.begin(115200, SERIAL_8N1, RXp2, TXp2);  // Initialize UART1 (RX3, TX1)
+  
+  delay(100);  // Allow time for UART to initialize
 }
 
 void loop() {
-    if (Serial2.available()) {
-        String receivedText = Serial2.readString();
-        Serial.println("Received text: " + receivedText);
-        processCommand(receivedText);
-    }
-    delay(100);
+  // Check if a new command has been received via UART
+  if (mySerial.available()) {
+    String receivedString = mySerial.readStringUntil('\n');  // Read the entire message
+    receivedString.trim();  // Remove any trailing/leading spaces
+    Serial.println("Received text: " + receivedString);  // Print the received text
+    
+    resetAllLights();  // Clear previous light states to ensure fresh command processing
+    
+    // Process the new command
+    processCommand(receivedString);
+    
+    // Clear the string after processing to avoid reprocessing the old command
+    receivedString = "";
+  }
+
+  delay(10);  // Reduced delay for better responsiveness
 }
 
+// Function to process commands and control lights
 void processCommand(String command) {
-    command.toLowerCase();  // Convert to lowercase for easier matching
+  command.toLowerCase();  // Convert to lowercase for easier matching
 
-    // Control lights based on commands
-    if (command.indexOf("turn on light one") >= 0) {
-        controlLight(pin_1, HIGH);
-    } else if (command.indexOf("turn off light one") >= 0) {
-        controlLight(pin_1, LOW);
-    } else if (command.indexOf("turn on light two") >= 0) {
-        controlLight(pin_2, HIGH);
-    } else if (command.indexOf("turn off light two") >= 0) {
-        controlLight(pin_2, LOW);
-    } else if (command.indexOf("turn on light three") >= 0) {
-        controlLight(pin_3, HIGH);
-    } else if (command.indexOf("turn off light three") >= 0) {
-        controlLight(pin_3, LOW);
-    } else if (command.indexOf("turn on all lights") >= 0) {
-        controlAllLights(HIGH);
-    } else if (command.indexOf("turn off all lights") >= 0) {
-        controlAllLights(LOW);
-    } else {
-        Serial.println("Command not recognized");
-    }
+  // Control lights based on commands
+  if (command.indexOf("turn on light one") >= 0) {
+    controlLight(pin_1, HIGH);
+  } else if (command.indexOf("turn off light one") >= 0) {
+    controlLight(pin_1, LOW);
+  } else if (command.indexOf("turn on light two") >= 0) {
+    controlLight(pin_2, HIGH);
+  } else if (command.indexOf("turn off light two") >= 0) {
+    controlLight(pin_2, LOW);
+  } else if (command.indexOf("turn on light three") >= 0) {
+    controlLight(pin_3, HIGH);
+  } else if (command.indexOf("turn off light three") >= 0) {
+    controlLight(pin_3, LOW);
+  } else if (command.indexOf("turn on all lights") >= 0) {
+    controlAllLights(HIGH);
+  } else if (command.indexOf("turn off all lights") >= 0) {
+    controlAllLights(LOW);
+  } else {
+    Serial.println("Command not recognized");  // Print the error message
+    digitalWrite(pin_4, HIGH);  // Trigger pin_4 for unrecognized command
+  }
 }
 
 // Function to control a single light
 void controlLight(int pin, int state) {
-    digitalWrite(pin, state);  // Set the specified pin to the desired state
-    Serial.print("Pin ");
-    Serial.print(pin);
-    Serial.println(state == HIGH ? " set HIGH" : " set LOW");
+  digitalWrite(pin, state);  // Set the specified pin to the desired state
+  Serial.print("Pin ");
+  Serial.print(pin);
+  Serial.println(state == HIGH ? " set HIGH" : " set LOW");
 }
 
 // Function to control all lights
 void controlAllLights(int state) {
-    for (int pin : {pin_1, pin_2, pin_3}) {
-        digitalWrite(pin, state);
-    }
-    Serial.println(state == HIGH ? "All pins set HIGH" : "All pins set LOW");
+  for (int pin : {pin_1, pin_2, pin_3}) {
+    digitalWrite(pin, state);
+  }
+  Serial.println(state == HIGH ? "All pins set HIGH" : "All pins set LOW");
+}
+
+// Function to reset all lights (turn off by default)
+void resetAllLights() {
+  digitalWrite(pin_1, LOW);
+  digitalWrite(pin_2, LOW);
+  digitalWrite(pin_3, LOW);
+  digitalWrite(pin_4, LOW);
+  Serial.println("All lights reset to LOW (OFF)");  // Feedback to Serial Monitor
 }
