@@ -1,58 +1,74 @@
 //////Running code with board maneger verstion 1.0.6
- #define led_1 15
-#define led_2 4
-#define button 32 // Button_Sensor
-#define led_3 2
-#define RXp2 16
-#define TXp2 17
+#define led_1 14
+#define led_2 12
+#define led_3 13
+#define button 27
+
+#define led_4 33
+#define led_5 32
+#define led_6 35
+
+#define RXp2 3  // RECEIVER
+#define TXp2 1  // TRANSMITTER
 #include "Audio.h"
 #include "CloudSpeechClient.h"
-int i=0;
+
+HardwareSerial mySerial(1);  // Use UART1 (TX1/RX3)
+
+int i = 0;
 void setup() {
-pinMode(button, INPUT);
-pinMode(led_1,OUTPUT);
-pinMode(led_2,OUTPUT);
- pinMode(led_3,OUTPUT);
-Serial.begin(115200);
-Serial2.begin(115200, SERIAL_8N1, RXp2,TXp2);
-//  Serial.println(My_Data);
+  pinMode(button, INPUT);
+  pinMode(led_1, OUTPUT);
+  pinMode(led_2, OUTPUT);
+  pinMode(led_3, OUTPUT);
+
+  pinMode(led_4, OUTPUT);
+  pinMode(led_5, OUTPUT);
+  pinMode(led_6, OUTPUT);
+
+  Serial.begin(115200);                      // Initialize the Serial Monitor
+  mySerial.begin(115200, SERIAL_8N1, 3, 1);  // Baud rate, config, RX, TX
+
+  delay(100);  // Allow time for UART to initialize
 }
 
 void loop() {
-   
-     digitalWrite(led_1, 0);
-     digitalWrite(led_2, 0);
-     digitalWrite(led_3, 0);
 
-   if(i==0){
-   Serial.println("Press button");
-   i=1;
-   }
- //  if(i==1){delay(1);}  
-    delay(500);
-    if(digitalRead(button)==0){
-    Serial2.println("\nPlease Ask!\n");
-    digitalWrite(led_1, 1);
-    digitalWrite(led_2, 0);
-    digitalWrite(led_3, 0);
-    delay(2100);
+  digitalWrite(led_4, 0);
+  digitalWrite(led_5, 0);
+  digitalWrite(led_6, 0);
 
-  Serial.println("\r\nRecord start!\r\n");
-  //Serial2.println("\r\nRecord start!\r\n");
-  Audio* audio = new Audio(ADMP441);
- //Audio* audio = new Audio(M5STACKFIRE);
-  audio->Record();
-  Serial.println("Recoding Complited Processing");
-  digitalWrite(led_1,0);
-  digitalWrite(led_3,0);
-  digitalWrite(led_2,1);
-  CloudSpeechClient* cloudSpeechClient = new CloudSpeechClient(USE_APIKEY);
-  cloudSpeechClient->Transcribe(audio);
-  delete cloudSpeechClient;
-  delete audio;
-  i=0;
+  if (digitalRead(27) == 0) {
+    Serial.println("Press button");
   }
-  if(digitalRead(button)==1){
-    delay(1000); 
-    }
-} 
+
+  delay(100);
+
+  if (digitalRead(27) == 1) {
+    Serial.println("\nPlease Ask!\n");
+    digitalWrite(led_4, 1);
+    digitalWrite(led_5, 0);
+    digitalWrite(led_6, 0);
+    delay(2000);
+
+    Serial.println("\r\nRecord start!\r\n");
+    digitalWrite(led_4, 0);
+    digitalWrite(led_5, 1);
+    digitalWrite(led_6, 0);
+    Audio* audio = new Audio(INMP441);
+    audio->Record();
+
+    digitalWrite(led_4, 0);
+    digitalWrite(led_5, 0);
+    digitalWrite(led_6, 1);
+    Serial.println("Recoding Complited Processing");
+
+    CloudSpeechClient* cloudSpeechClient = new CloudSpeechClient(USE_APIKEY);
+    cloudSpeechClient->Transcribe(audio);
+    delete cloudSpeechClient;
+    delete audio;
+  }
+  if (digitalRead(27) == 1) {
+    delay(2000);
+  }
+}
