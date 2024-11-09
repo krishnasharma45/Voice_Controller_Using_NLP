@@ -82,8 +82,8 @@ void CloudSpeechClient::Transcribe(Audio* audio) {
   Serial.println(transcribed_text);
 
   // Indicate completion using LEDs
-  digitalWrite(led_2, 1); // Indicate transcription done
-  digitalWrite(led_1, 1); // Success
+  digitalWrite(led_1, 1); // Indicate transcription done
+  digitalWrite(led_2, 1); // Success
   delay(1000);  // Hold for a second before resetting LEDs
   digitalWrite(led_1, 0);
   digitalWrite(led_2, 0);
