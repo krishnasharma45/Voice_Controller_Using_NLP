@@ -1,9 +1,9 @@
 #include "I2S.h"
 #define SAMPLE_RATE (16000)
-#define PIN_I2S_BCLK 26
-#define PIN_I2S_LRC 22
-#define PIN_I2S_DIN 34
-#define PIN_I2S_DOUT 25
+#define PIN_I2S_BCLK 26    // Connected to SCK (Serial-Data Clock for I²S Interface)
+#define PIN_I2S_LRC 22     // Connected to WS (Word Select for I²S Interface)
+#define PIN_I2S_DIN 34     // Connected to SD (Serial Data Output for I²S Interface)
+#define PIN_I2S_DOUT 25    // REMOVED: This pin is unused for INMP441
 
 I2S::I2S(MicType micType) {
   if (micType == M5GO || micType == M5STACKFIRE) {
@@ -26,7 +26,7 @@ I2S::I2S(MicType micType) {
   else if (micType == INMP441 || micType == ICS43434) {
     BITS_PER_SAMPLE = I2S_BITS_PER_SAMPLE_32BIT;
     i2s_config_t i2s_config = {
-      .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
+      .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX), // Only RX mode, as INMP441 is input-only
       .sample_rate = SAMPLE_RATE,
       .bits_per_sample = BITS_PER_SAMPLE,
       .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
@@ -37,10 +37,10 @@ I2S::I2S(MicType micType) {
     };
 
     i2s_pin_config_t pin_config;
-    pin_config.bck_io_num = PIN_I2S_BCLK;
-    pin_config.ws_io_num = PIN_I2S_LRC;
-    pin_config.data_out_num = I2S_PIN_NO_CHANGE;
-    pin_config.data_in_num = PIN_I2S_DIN;
+    pin_config.bck_io_num = PIN_I2S_BCLK;  // Connected to SCK
+    pin_config.ws_io_num = PIN_I2S_LRC;   // Connected to WS
+    pin_config.data_out_num = I2S_PIN_NO_CHANGE; // REMOVED: No DOUT used
+    pin_config.data_in_num = PIN_I2S_DIN;   // Connected to SD (data input)
     i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);
     i2s_set_pin(I2S_NUM_0, &pin_config);
     i2s_set_clk(I2S_NUM_0, SAMPLE_RATE, BITS_PER_SAMPLE, I2S_CHANNEL_STEREO);
