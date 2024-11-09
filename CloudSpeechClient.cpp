@@ -34,8 +34,6 @@ void CloudSpeechClient::PrintHttpBody2(Audio* audio) {
     enc = base64::encode((byte*)wavData[j], audio->dividedWavDataSize);
     enc.replace("\n", "");
     client.print(enc);
-    Serial.print("Received JSON data: ");
-    Serial.println(My_Answer);
   }
 }
 
