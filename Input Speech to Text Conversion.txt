@@ -4,9 +4,9 @@
 #define led_2 4
 #define button 27
 
-#define led_4 33
+#define led_4 35
 #define led_5 32
-#define led_6 35
+#define led_6 25
 
 #define RXp2 3  // RECEIVER
 #define TXp2 1  // TRANSMITTER
