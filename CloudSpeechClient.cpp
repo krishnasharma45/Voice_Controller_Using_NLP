@@ -6,9 +6,9 @@
 #include <Arduino.h>
 #include <HTTPClient.h>
 
-#define led_3 13
-#define led_1 14
-#define led_2 12
+#define led_3 19
+#define led_1 5
+#define led_2 4
 
 CloudSpeechClient::CloudSpeechClient(Authentication authentication) {
   this->authentication = authentication;
