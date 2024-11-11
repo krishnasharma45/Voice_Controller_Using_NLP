@@ -1,5 +1,5 @@
 #define pin_1 21  // Pin for light one control
-#define pin_2 18  // Pin for light two control
+#define pin_2 19  // Pin for light two control
 #define pin_3 16  // Pin for light three control
 #define pin_4 15   // Pin for "not recognized" message (optional)
 
