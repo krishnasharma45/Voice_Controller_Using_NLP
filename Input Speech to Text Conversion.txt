@@ -1,7 +1,7 @@
 //////Running code with board maneger verstion 1.0.6
-#define led_1 14
-#define led_2 12
-#define led_3 13
+#define led_3 19
+#define led_1 5
+#define led_2 4
 #define button 27
 
 #define led_4 33
