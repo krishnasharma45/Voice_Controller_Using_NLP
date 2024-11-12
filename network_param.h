@@ -86,7 +86,7 @@ const char* root_ca1=
 //const String AccessToken = "";
 
 // It is also possible to use "API Key" instead of "Access Token". It doesn't have time limit.
-const String ApiKey = "ya29.a0AeDClZDx31HP5dc_ST4NOMU0x84D4uWvu7B8UeaETlXA-ev_smRJBMSkkLP5ocfy-oiUPPxnCSAn6kr1chsg3ntxSkcppuOZMoX5N_3PqTvqwRSjoVAPn_-oir9WQvWtkY7FQ-XXwatzHpD9NQC_iU8WyvbwzBKMFRoe4OYZA6CHVvEaCgYKAY4SARMSFQHGX2MikWKKyvSdgavE2vVQtoMfZw0182";
+const String ApiKey = "AIzaSyCEo-C-xDYkzRwzWqsHVivFX2jiocA8h0c";
 
 // see https://cloud.google.com/docs/authentication?hl=ja#getting_credentials_for_server-centric_flow
 // see https://qiita.com/basi/items/3623a576b754f738138e (Japanese)
