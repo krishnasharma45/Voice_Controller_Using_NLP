@@ -1,8 +1,8 @@
 #include "I2S.h"
 #define SAMPLE_RATE (16000)
-#define PIN_I2S_BCLK 26    // Connected to SCK (Serial-Data Clock for I²S Interface)
-#define PIN_I2S_LRC 22     // Connected to WS (Word Select for I²S Interface)
-#define PIN_I2S_DIN 34     // Connected to SD (Serial Data Output for I²S Interface)
+#define PIN_I2S_BCLK 12    // Connected to SCK (Serial-Data Clock for I²S Interface)
+#define PIN_I2S_LRC 15     // Connected to WS (Word Select for I²S Interface)
+#define PIN_I2S_DIN 33     // Connected to SD (Serial Data Output for I²S Interface)
 #define PIN_I2S_DOUT 25    // REMOVED: This pin is unused for INMP441
 
 I2S::I2S(MicType micType) {
