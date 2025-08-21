@@ -63,7 +63,7 @@ void loop() {
     digitalWrite(led_6, 1);
     Serial.println("Recoding Complited Processing");
 
-    CloudSpeechClient* cloudSpeechClient = new CloudSpeechClient(USE_API_KEY);
+    CloudSpeechClient* cloudSpeechClient = new CloudSpeechClient(USE_APIKEY);
     cloudSpeechClient->Transcribe(audio);
     delete cloudSpeechClient;
     delete audio;
