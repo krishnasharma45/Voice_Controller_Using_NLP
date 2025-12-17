@@ -1,4 +1,4 @@
-# Voice Controller Using NLP
+# Voice Controller Automation System
 
 A production‑grade, ESP32‑based voice controller that captures audio from an INMP441 I2S MEMS microphone, streams audio for cloud Speech‑to‑Text, interprets the transcribed text with simple NLP/intent logic, and triggers device actions over Wi‑Fi.
 
